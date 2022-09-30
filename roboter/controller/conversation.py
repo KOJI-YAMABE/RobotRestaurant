@@ -1,5 +1,6 @@
 from roboter.models import robot
 
+
 def talk_about_restaurant():
     restaurant_robot = robot.RestaurantRobot()
     restaurant_robot.hello()

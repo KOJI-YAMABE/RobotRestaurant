@@ -1,12 +1,12 @@
-import csv
-
 from roboter.views import console
 from roboter.models import ranking
 
 DEFAULT_NAME = '基山'
 
+
 class Robot(object):
-    def __init__(self, restaurant_name=DEFAULT_NAME, user_name='', speaker_color='green'):
+    def __init__(self, restaurant_name=DEFAULT_NAME, user_name='',
+                 speaker_color='green'):
         self.restaurant_name = restaurant_name
         self.user_name = user_name
         self.speaker_color = speaker_color
@@ -14,7 +14,9 @@ class Robot(object):
     def hello(self):
         while True:
             template = console.get_template('hello.txt', self.speaker_color)
-            user_name = input(template.substitute({'restaurant_name': self.restaurant_name}))
+            user_name = input(template.substitute({
+                'restaurant_name': self.restaurant_name
+            }))
             if user_name:
                 self.user_name = user_name.title()
                 break
@@ -51,7 +53,8 @@ class RestaurantRobot(Robot):
                 break
 
             if is_yes.lower() == 'n' or is_yes.lower() == 'no':
-                new_recommend_menu = self.ranking_model.get_most_popular(not_list=will_recommend_menus)
+                new_recommend_menu = self.ranking_model.get_most_popular(
+                    not_list=will_recommend_menus)
                 if not new_recommend_menu:
                     break
                 will_recommend_menus.append(new_recommend_menu)
@@ -59,7 +62,8 @@ class RestaurantRobot(Robot):
     @_hello_decorator
     def ask_your_favorite(self):
         while True:
-            template = console.get_template('which_menu.txt', self.speaker_color)
+            template = console.get_template(
+                'which_menu.txt', self.speaker_color)
             menu = input(template.substitute({
                 'user_name': self.user_name
             }))
@@ -67,6 +71,7 @@ class RestaurantRobot(Robot):
                 self.ranking_model.increment(menu, self.user_name)
                 break
 
+    @_hello_decorator
     def thank_you(self):
         template = console.get_template('good_by.txt', self.speaker_color)
         print(template.substitute({

@@ -56,7 +56,8 @@ class RankingModel(CsvModel):
         with open(self.csv_file, 'r+') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
-                self.data[row[RANKING_COLUMN_MENU]] = int(row[RANKING_COLUMN_COUNT])
+                self.data[row[RANKING_COLUMN_MENU]] = \
+                    int(row[RANKING_COLUMN_COUNT])
         return self.data
 
     def increment(self, menu, user_name):
