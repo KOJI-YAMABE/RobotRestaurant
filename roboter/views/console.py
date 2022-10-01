@@ -1,10 +1,19 @@
+import logging
 import os
 import string
 
 import termcolor
 
+logger = logging.getLogger(__name__)
+
 
 def get_template(template_file_path, color=None):
+    logger.info({
+        'action': 'console',
+        'status': 'run',
+        'file_name': template_file_path,
+        'color': color
+    })
     template = find_template(template_file_path)
     with open(template, 'r', encoding='utf-8') as template_file:
         contents = template_file.read()
@@ -12,6 +21,10 @@ def get_template(template_file_path, color=None):
         contents = '{splitter}{sep}{contents}{sep}{splitter}{sep}'.format(
             contents=contents, splitter='=' * 60, sep=os.linesep)
         contents = termcolor.colored(contents, color)
+        logger.info({
+            'action': 'console',
+            'status': 'success'
+        })
         return string.Template(contents)
 
 
@@ -24,14 +37,14 @@ def find_template(temp_file):
     temp_file_path = os.path.join(temp_dir_path, temp_file)
 
     if not os.path.exists(temp_file_path):
-        raise NoTemplateError('Could not find {}'.formart(temp_file))
+        raise NoTemplateError('Could not find {}'.format(temp_file))
 
     return temp_file_path
 
 
 def get_template_dir_path():
     template_dir_path = None
-    # setting.pyにファイルを作った際はそこから優先的に読み取る
+    # setting.pyにファイルがあれば優先的に読み取る
     try:
         import settings
         if settings.TEMPLATE_PATH:

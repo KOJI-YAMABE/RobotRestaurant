@@ -1,7 +1,10 @@
 import collections
 import csv
+import logging
 import os
 import pathlib
+
+logger = logging.getLogger(__name__)
 
 RANKING_COLUMN_USER_NAME = 'USER_NAME'
 RANKING_COLUMN_MENU = 'MENU'
@@ -65,6 +68,11 @@ class RankingModel(CsvModel):
         self.save(user_name)
 
     def save(self, user_name):
+        logger.info({
+            'action': 'save',
+            'csv_file': self.csv_file,
+            'status': 'run'
+        })
         with open(self.csv_file, 'w+') as csv_file:
             writer = csv.DictWriter(csv_file, fieldnames=self.column)
             writer.writeheader()
@@ -75,3 +83,8 @@ class RankingModel(CsvModel):
                     RANKING_COLUMN_MENU: menu,
                     RANKING_COLUMN_COUNT: count
                 })
+        logger.info({
+            'action': 'save',
+            'csv_file': self.csv_file,
+            'status': 'success'
+        })
